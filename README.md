@@ -1,1 +1,0 @@
-# Kart_Hesap
