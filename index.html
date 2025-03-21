@@ -53,8 +53,12 @@
 
 /* Sil Butonu Kırmızı */
 .btn-delete {
-    background-color: red;
+    background-color: rgb(255, 0, 0);
     color: white;
+}
+.btn-Format{
+background-color: #b90000;
+color: white;
 }
 
 
@@ -110,6 +114,7 @@
     <div id="contextMenu" class="context-menu">
         <button onclick="updateSelectedNumber()" class="btn-update">Güncelle</button>
         <button onclick="deleteSelectedNumber()" class="btn-delete">Sil</button>
+        <button onclick="ListFormat()" class="btn-Format">Sıfırla</button>
     </div>
 
     <script>
@@ -118,6 +123,17 @@
         let selectedIndex = null;
         const contextMenu = document.getElementById("contextMenu");
         const inputElement = document.getElementById("numberInput");
+        
+        function ListFormat(){
+            if (selectedIndex !== null) {
+        let confirmDelete = confirm("Tüm Listenin Silinmesine Eminmisiniz?");
+        if (confirmDelete) {
+           toplam = 0;
+            numbers = [];  
+            updateNumberList();
+        }
+        contextMenu.style.display = "none";
+        }}
 
         function parseNumber(value) {
             return parseFloat(value.replace(",", "."));
@@ -138,12 +154,11 @@
         }
 
         function updateNumberList() {
-            i = 1;
             let listElement = document.getElementById("SayiList");
             listElement.innerHTML = "";
             numbers.forEach((num, index) => {
                 let span = document.createElement("span");
-                span.innerText = i+++".  "+ num;
+                span.innerText = num;
                 
                 span.oncontextmenu = function(event) {
                     event.preventDefault();
@@ -201,6 +216,14 @@
                 addNumber();
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("touchmove", function(event) {
+            if (window.scrollY === 0) {
+                event.preventDefault(); // Mobilde yukarı çekip yenilemeyi engelle
+            }
+        }, { passive: false });
+    });
     </script>
 </body>
 </html>
