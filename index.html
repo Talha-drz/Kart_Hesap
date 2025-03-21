@@ -105,8 +105,8 @@ color: white;
     </style>
 </head>
 <body>
-    <h2>Sayıları Topla</h2>
-    <input type="number" id="numberInput" placeholder="Sayı gir" />
+    <h2>Süt Kartı Hesaplama</h2>
+    <input type="number" id="numberInput" placeholder="Litre Gir" />
     <button onclick="addNumber()" class="btn-add">Ekle</button>
     <button onclick="finish()" class="btn-finish">Topla</button>
     <div id="SayiList"></div>
@@ -130,6 +130,7 @@ color: white;
         if (confirmDelete) {
            toplam = 0;
             numbers = [];  
+             document.getElementById("result").innerText = "";
             updateNumberList();
         }
         contextMenu.style.display = "none";
@@ -165,7 +166,11 @@ color: white;
                     selectedIndex = index;
                     showContextMenu(event.pageX, event.pageY);
                 };
-                
+                span.ontouchstart = function(event) {
+    event.preventDefault();
+    selectedIndex = index;
+    showContextMenu(event.touches[0].pageX, event.touches[0].pageY);
+};
                 listElement.appendChild(span);
             });
         }
@@ -196,6 +201,7 @@ color: white;
         if (confirmDelete) {
             toplam -= numbers[selectedIndex];
             numbers.splice(selectedIndex, 1);
+             document.getElementById("result").innerText = "";
             updateNumberList();
         }
         contextMenu.style.display = "none";
@@ -208,10 +214,12 @@ color: white;
         });
 
         function finish() {
-            document.getElementById("result").innerText = "Toplam: " + toplam;
+    let formattedTotal = toplam.toLocaleString("tr-TR"); // Binlik ayırıcı ekler
+    document.getElementById("result").innerText = "Toplam: " + formattedTotal + " Litre";
         }
 
         inputElement.addEventListener("keydown", function(event) {
+             document.getElementById("result").innerText = "";
             if (event.key === "Enter") {
                 addNumber();
             }
