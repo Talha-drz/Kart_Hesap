@@ -166,11 +166,7 @@ color: white;
                     selectedIndex = index;
                     showContextMenu(event.pageX, event.pageY);
                 };
-                span.ontouchstart = function(event) {
-    event.preventDefault();
-    selectedIndex = index;
-    showContextMenu(event.touches[0].pageX, event.touches[0].pageY);
-};
+
                 listElement.appendChild(span);
             });
         }
