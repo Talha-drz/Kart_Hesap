@@ -5,64 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sayı Toplama</title>
     <style>
-        /* Sayılar için stil */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
         #SayiList span {
             display: inline-block;
             margin: 5px;
             padding: 5px 10px;
-            background-color: lightblue; /* Daha açık mavi bir arka plan */
-            color: darkblue; /* Sayıların yazı rengi */
+            background-color: lightblue;
+            color: darkblue;
             cursor: pointer;
-            position: relative;
-            border-radius: 5px; /* Köşeleri yuvarlatmak için */
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         #SayiList span:hover {
-            background-color: lightgreen; /* Hover durumunda yeşil arka plan */
-            color: darkgreen; /* Hover durumunda yazı rengi */
+            background-color: lightgreen;
+            color: darkgreen;
         }
 
-        /* Butonlar için stil */
         button {
-            background-color: #4CAF50; /* Ekle butonunun arka plan rengi (yeşil) */
-            color: white; /* Yazı rengi */
+            background-color: #4CAF50;
+            color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            border-radius: 5px; /* Buton köşeleri yuvarlatılmış */
-            transition: background-color 0.3s ease; /* Buton geçiş efekti */
+            border-radius: 5px;
+            transition: background-color 0.3s;
             margin: 5px;
         }
 
-        button:hover {
-            background-color: #45a049; /* Hover durumunda buton rengi */
-        }
+        button:hover { background-color: #45a049; }
+        .btn-update { background-color: yellow; color: black; }
+        .btn-delete { background-color: red; color: white; }
+        .btn-reset { background-color: darkred; color: white; }
+        .btn-multiply { background-color: gold; color: black; }
+        .btn-toplam { background-color: rgb(0, 204, 255); color: black; }
+        .btn-klavuz { background-color: rgb(0, 60, 255); color: black; }
 
-      /* Güncelle ve Bitir Butonları Açık Mavi */
-.btn-update, .btn-finish {
-    background-color: #87CEFA; /* Açık Mavi */
-    color: black;
-}
-
-/* Güncelle Butonunu Sarı Yap */
-.btn-update {
-    background-color: yellow; /* Sarı */
-    color: black;
-}
-
-/* Sil Butonu Kırmızı */
-.btn-delete {
-    background-color: rgb(255, 0, 0);
-    color: white;
-}
-.btn-Format{
-background-color: #b90000;
-color: white;
-}
-
-
-        /* Input text box için stil */
         #numberInput {
             padding: 10px;
             border: 1px solid #ccc;
@@ -73,18 +56,16 @@ color: white;
         }
 
         #numberInput:focus {
-            border-color: #4CAF50; /* Input focus rengi */
-            box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5); /* Hafif yeşil gölge */
+            border-color: #4CAF50;
+            box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5);
         }
 
-        /* Sonuç metni */
         #result {
             font-size: 18px;
             font-weight: bold;
             color: #333;
         }
 
-        /* Sağ tıklama menüsü için stil */
         .context-menu {
             position: absolute;
             background: white;
@@ -92,29 +73,33 @@ color: white;
             display: none;
             padding: 5px;
             z-index: 1000;
-            border-radius: 5px; /* Köşeleri yuvarlatmak */
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Gölgeleme efekti */
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
+
         .context-menu button:hover {
-            background: #ff4500; /* Hover durumunda buton rengi */
+            background: #ff4500;
         }
-        /* Div kopyalanamaz */
-        #SayiList {
-            user-select: none; /* Kopyalanmasını engeller */
-        }
+
+        #SayiList { user-select: none; }
     </style>
 </head>
 <body>
     <h2>Süt Kartı Hesaplama</h2>
     <input type="number" id="numberInput" placeholder="Litre Gir" />
-    <button onclick="addNumber()" class="btn-add">Ekle</button>
-    <button onclick="finish()" class="btn-finish">Topla</button>
+    <button onclick="addNumber()">Ekle</button>
+    <button onclick="finish()" class="btn-toplam">Topla</button>
+    <button onclick="multiply()" class="btn-multiply">Çarp</button>
+    <button onclick="showGuide()" class="btn-klavuz">Tanıt</button>
+
+
+
     <div id="SayiList"></div>
     <p id="result"></p>
     <div id="contextMenu" class="context-menu">
         <button onclick="updateSelectedNumber()" class="btn-update">Güncelle</button>
         <button onclick="deleteSelectedNumber()" class="btn-delete">Sil</button>
-        <button onclick="ListFormat()" class="btn-Format">Sıfırla</button>
+        <button onclick="resetList()" class="btn-reset">Sıfırla</button>
     </div>
 
     <script>
@@ -123,34 +108,41 @@ color: white;
         let selectedIndex = null;
         const contextMenu = document.getElementById("contextMenu");
         const inputElement = document.getElementById("numberInput");
-        
-        function ListFormat(){
-            if (selectedIndex !== null) {
-        let confirmDelete = confirm("Tüm Listenin Silinmesine Eminmisiniz?");
-        if (confirmDelete) {
-           toplam = 0;
-            numbers = [];  
-             document.getElementById("result").innerText = "";
-            updateNumberList();
-        }
-        contextMenu.style.display = "none";
-        }}
 
-        function parseNumber(value) {
-            return parseFloat(value.replace(",", "."));
+        function multiply() {
+            let sayi = parseFloat(inputElement.value);
+            if (!isNaN(sayi) && sayi !== 0) {
+                let sonuc = toplam * sayi;
+                document.getElementById("result").innerText = "Çarpım Sonucu: " + sonuc;
+            } else {
+                document.getElementById("result").innerText = "Geçersiz Değer Girdiniz";
+            }
+        }
+
+        function resetList() {
+            if (confirm("Tüm listeyi silmek istediğinizden emin misiniz?")) {
+                toplam = 0;
+                numbers = [];
+                document.getElementById("result").innerText = "";
+                updateNumberList();
+            }
         }
 
         function addNumber() {
-            let sayı = parseNumber(inputElement.value);
-            
-            if (!isNaN(sayı) && sayı !== 0) {
-                numbers.push(sayı);
-                toplam += sayı;
+            let sayi = parseFloat(inputElement.value);
+            if (!isNaN(sayi) && sayi !== 0&&sayi !==-1) {
+                numbers.push(sayi);
+                toplam += sayi;
                 updateNumberList();
                 inputElement.value = "";
                 inputElement.focus();
-            } else if (sayı === 0) {
+            }
+            else if(!isNaN(sayi) && sayi === 0)
+            {
                 finish();
+            }
+            else{
+                resetList();
             }
         }
 
@@ -160,13 +152,11 @@ color: white;
             numbers.forEach((num, index) => {
                 let span = document.createElement("span");
                 span.innerText = num;
-                
                 span.oncontextmenu = function(event) {
                     event.preventDefault();
                     selectedIndex = index;
                     showContextMenu(event.pageX, event.pageY);
                 };
-
                 listElement.appendChild(span);
             });
         }
@@ -179,55 +169,75 @@ color: white;
 
         function updateSelectedNumber() {
             if (selectedIndex !== null) {
-                let newValue = prompt("Yeni değeri girin:", numbers[selectedIndex]);
-                let parsedValue = parseNumber(newValue);
-                
-                if (!isNaN(parsedValue)) {
-                    toplam = toplam - numbers[selectedIndex] + parsedValue;
-                    numbers[selectedIndex] = parsedValue;
+                let sayi = parseFloat(inputElement.value);
+                if (!isNaN(sayi) && sayi !== 0) {
+                    toplam = toplam - numbers[selectedIndex] + sayi;
+                    numbers[selectedIndex] = sayi;
                     updateNumberList();
+                    inputElement.value = "";
+                    document.getElementById("result").innerText = "";
                 }
                 contextMenu.style.display = "none";
             }
         }
 
         function deleteSelectedNumber() {
-    if (selectedIndex !== null) {
-        let confirmDelete = confirm("Bu sayıyı silmek istediğinize emin misiniz?");
-        if (confirmDelete) {
-            toplam -= numbers[selectedIndex];
-            numbers.splice(selectedIndex, 1);
-             document.getElementById("result").innerText = "";
-            updateNumberList();
+            if (selectedIndex !== null) {
+                if (confirm("Bu sayıyı silmek istediğinize emin misiniz?")) {
+                    toplam -= numbers[selectedIndex];
+                    numbers.splice(selectedIndex, 1);
+                    document.getElementById("result").innerText = "";
+                    updateNumberList();
+                }a
+                contextMenu.style.display = "none";
+            }
         }
-        contextMenu.style.display = "none";
-    }
-}
-
 
         document.addEventListener("click", function() {
             contextMenu.style.display = "none";
         });
 
         function finish() {
-    let formattedTotal = toplam.toLocaleString("tr-TR"); // Binlik ayırıcı ekler
-    document.getElementById("result").innerText = "Toplam: " + formattedTotal + " Litre";
+            document.getElementById("result").innerText = "Toplam: " + toplam.toLocaleString("tr-TR") + " Litre";
         }
 
         inputElement.addEventListener("keydown", function(event) {
-             document.getElementById("result").innerText = "";
             if (event.key === "Enter") {
                 addNumber();
             }
+            document.getElementById("result").innerText = "";
         });
+        
+   
+        function showGuide() {
+            document.getElementById("result").innerText = 
+        "Bu uygulama, süt hesaplamalarını yapmanızı sağlar. Kullanımı şu şekildedir:\n\n" +
+        "### Bilgisayar Kullanımı:\n" +
+        "1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak bir sayı ekleyebilirsiniz.\n" +
+        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak toplamı hesaplayabilirsiniz.\n" +
+        "   **Kısa Yol**: '0' yazıp 'Enter' tuşuna basarak toplamı direkt olarak gösterebilirsiniz.\n" +
+        "3. **Çarpma**: 'Çarp' butonuna tıklayarak mevcut toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
+        "4. **Sayı Güncelleme**: Bir sayı yazıp, güncellemek istediğiniz sayıya tıklayarak 'Güncelle' butonuna tıklayın.\n" +
+        "   **Güncelleme İşlemi**: Güncellenmek istenen sayıya tıkladıktan sonra, yeni sayıyı yazıp 'Güncelle'ye basarak o sayıyı güncelleyebilirsiniz.\n" +
+        "5. **Sayı Silme**: Sayıya sağ tıklayarak 'Sil' seçeneğini kullanabilirsiniz.\n" +
+        "   **Silme İşlemi**: Sayıyı silmek için, sağ tıklayıp 'Sil' seçeneğini seçtikten sonra, sayıyı " +
+        "silme onayını verirsiniz.\n" +
+        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz yada hiç bir değer girmeden 'Enter' tuşuna basarakta yapılır.\n\n" +
+        
+        "### Telefon Kullanımı:\n" +
+        "1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak bir sayı ekleyebilirsiniz.\n" +
+        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak toplamı hesaplayabilirsiniz.\n" +
+        "   **Kısa Yol**: '0' yazıp 'Enter' tuşuna basarak toplamı direkt olarak gösterebilirsiniz.\n" +
+        "3. **Çarpma**: 'Çarp' butonuna tıklayarak mevcut toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
+        "4. **Sayı Güncelleme**: Bir sayı yazıp, güncellemek istediğiniz sayıya uzun basarak 'Güncelle' butonuna tıklayın.\n" +
+        "   **Güncelleme İşlemi**: Güncellenmek istenen sayıya uzun basıp, yeni sayıyı yazıp 'Güncelle'ye basarak o sayıyı güncelleyebilirsiniz.\n" +
+        "5. **Sayı Silme**: Sayıya uzun basarak 'Sil' seçeneğini kullanabilirsiniz.\n" +
+        "   **Silme İşlemi**: Sayıyı silmek için, uzun basıp 'Sil' seçeneğini seçtikten sonra, sayıyı " +
+        "silme onayını verirsiniz.\n" +
+        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz.\n\n" +
 
-        document.addEventListener("DOMContentLoaded", function() {
-        document.addEventListener("touchmove", function(event) {
-            if (window.scrollY === 0) {
-                event.preventDefault(); // Mobilde yukarı çekip yenilemeyi engelle
-            }
-        }, { passive: false });
-    });
+        "Toplam değeri, sayıları ekleyerek ve işlemleri yaparak görebilirsiniz yada hiç bir değer girmeden 'Enter' tuşuna basarakta yapılır";
+    }
     </script>
 </body>
 </html>
