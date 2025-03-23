@@ -115,7 +115,7 @@
                 let sonuc = toplam * sayi;
                 document.getElementById("result").innerText = "Çarpım Sonucu: " + sonuc;
             } else {
-                document.getElementById("result").innerText = "Geçersiz Değer Girdiniz";
+                document.getElementById("result").innerText = "Geçerli Bir Değer Giriniz Çarpmak İçin";
             }
         }
 
@@ -130,15 +130,15 @@
 
         function addNumber() {
             let sayi = parseFloat(inputElement.value);
-            if (!isNaN(sayi) && sayi !== 0&&sayi !==-1) {
+            if (!isNaN(sayi) && sayi !== 0) {
                 numbers.push(sayi);
                 toplam += sayi;
                 updateNumberList();
                 inputElement.value = "";
                 inputElement.focus();
             }
-            else if(!isNaN(sayi) && sayi === 0)
-            {
+            else if(sayi === 0)
+            { 
                 finish();
             }
             else{
@@ -177,6 +177,9 @@
                     inputElement.value = "";
                     document.getElementById("result").innerText = "";
                 }
+                else{
+                    document.getElementById("result").innerText = "Geçerli Bir Değer Giriniz Güncellemek İçin";
+                }
                 contextMenu.style.display = "none";
             }
         }
@@ -202,41 +205,34 @@
         }
 
         inputElement.addEventListener("keydown", function(event) {
+             document.getElementById("result").innerText = "";
             if (event.key === "Enter") {
                 addNumber();
-            }
-            document.getElementById("result").innerText = "";
+            } 
         });
         
    
         function showGuide() {
             document.getElementById("result").innerText = 
-        "Bu uygulama, süt hesaplamalarını yapmanızı sağlar. Kullanımı şu şekildedir:\n\n" +
+            "Bu uygulama, süt hesaplamalarını yapmanızı sağlar. Kullanımı şu şekildedir:\n\n" +
+        
         "### Bilgisayar Kullanımı:\n" +
         "1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak bir sayı ekleyebilirsiniz.\n" +
-        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak toplamı hesaplayabilirsiniz.\n" +
-        "   **Kısa Yol**: '0' yazıp 'Enter' tuşuna basarak toplamı direkt olarak gösterebilirsiniz.\n" +
+        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak veya '0' yazıp 'Enter' tuşuna basarak toplamı hesaplayabilirsiniz.\n" +
         "3. **Çarpma**: 'Çarp' butonuna tıklayarak mevcut toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
-        "4. **Sayı Güncelleme**: Bir sayı yazıp, güncellemek istediğiniz sayıya tıklayarak 'Güncelle' butonuna tıklayın.\n" +
-        "   **Güncelleme İşlemi**: Güncellenmek istenen sayıya tıkladıktan sonra, yeni sayıyı yazıp 'Güncelle'ye basarak o sayıyı güncelleyebilirsiniz.\n" +
+        "4. **Sayı Güncelleme**: Güncellemek istediğiniz sayıya tıklayıp yeni sayıyı yazıp 'Güncelle' butonuna tıklayın.\n" +
         "5. **Sayı Silme**: Sayıya sağ tıklayarak 'Sil' seçeneğini kullanabilirsiniz.\n" +
-        "   **Silme İşlemi**: Sayıyı silmek için, sağ tıklayıp 'Sil' seçeneğini seçtikten sonra, sayıyı " +
-        "silme onayını verirsiniz.\n" +
-        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz yada hiç bir değer girmeden 'Enter' tuşuna basarakta yapılır.\n\n" +
-        
+        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz. Ayrıca, hiç bir değer girmeden 'Enter' tuşuna basarak da sıfırlayabilirsiniz.\n\n" +
+
         "### Telefon Kullanımı:\n" +
         "1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak bir sayı ekleyebilirsiniz.\n" +
-        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak toplamı hesaplayabilirsiniz.\n" +
-        "   **Kısa Yol**: '0' yazıp 'Enter' tuşuna basarak toplamı direkt olarak gösterebilirsiniz.\n" +
+        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak veya '0' yazıp 'Enter' tuşuna basarak toplamı hesaplayabilirsiniz.\n" +
         "3. **Çarpma**: 'Çarp' butonuna tıklayarak mevcut toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
-        "4. **Sayı Güncelleme**: Bir sayı yazıp, güncellemek istediğiniz sayıya uzun basarak 'Güncelle' butonuna tıklayın.\n" +
-        "   **Güncelleme İşlemi**: Güncellenmek istenen sayıya uzun basıp, yeni sayıyı yazıp 'Güncelle'ye basarak o sayıyı güncelleyebilirsiniz.\n" +
+        "4. **Sayı Güncelleme**: Güncellemek istediğiniz sayıya uzun basarak, yeni sayıyı yazıp 'Güncelle' butonuna tıklayın.\n" +
         "5. **Sayı Silme**: Sayıya uzun basarak 'Sil' seçeneğini kullanabilirsiniz.\n" +
-        "   **Silme İşlemi**: Sayıyı silmek için, uzun basıp 'Sil' seçeneğini seçtikten sonra, sayıyı " +
-        "silme onayını verirsiniz.\n" +
-        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz.\n\n" +
+        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz ayrıca hiçbir değer girmeden 'Enter' tuşuna basarakta yapabilirsiniz.\n\n"+
+        "Talha Durmaz\n Talha_Drz";
 
-        "Toplam değeri, sayıları ekleyerek ve işlemleri yaparak görebilirsiniz yada hiç bir değer girmeden 'Enter' tuşuna basarakta yapılır";
     }
     </script>
 </body>
