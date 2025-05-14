@@ -274,11 +274,20 @@ function playBeep() {
 recognition.onresult = function(event) {
     for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript.trim();
-        const sayi = parseFloat(transcript); // Sayıların ondalıklı olabilmesi için parseFloat kullanılıyor
-        if (!isNaN(sayi)) {
-            inputElement.value = sayi;
-            addNumber();
+        const sayi = parseFloat(transcript);
+        if (!isNaN(sayi)) {            
+            if (!isNaN(sayi) && sayi !== 0) {
+                numbers.push(sayi);
+                toplam += sayi;
+                updateNumberList();
+                inputElement.value = "";
+                inputElement.focus();
+            }
+            else if(sayi === 0) { 
+                finish();
+            }
             playBeep();
+            
         } else {
             console.log("Sayı değil:", transcript);
         }
@@ -287,6 +296,8 @@ recognition.onresult = function(event) {
 
 recognition.onerror = function(event) {
     alert("Hata: " + event.error);
+    inputElement.value = event.error; // Hata mesajını input'a yazdır
+
 };
 
 function startListening() {
@@ -295,7 +306,7 @@ function startListening() {
 
 // Dinlemeyi durdurma kaldırıldı – bu fonksiyon artık hiçbir işlem yapmıyor
 function stopListening() {
-    // Fonksiyon devre dışı bırakıldı
+    recognition.stop();
 }
 
 
