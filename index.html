@@ -280,8 +280,6 @@ recognition.onresult = function(event) {
                 numbers.push(sayi);
                 toplam += sayi;
                 updateNumberList();
-                inputElement.value = "";
-                inputElement.focus();
             }
             else if(sayi === 0) { 
                 finish();
@@ -301,11 +299,13 @@ recognition.onerror = function(event) {
 };
 
 function startListening() {
+    inputElement.disabled = true;  // Dinleme başlatıldığında input devre dışı
     recognition.start();
 }
 
 // Dinlemeyi durdurma kaldırıldı – bu fonksiyon artık hiçbir işlem yapmıyor
 function stopListening() {
+    inputElement.disabled = false; // Dinleme durdurulduğunda input tekrar etkin
     recognition.stop();
 }
 
