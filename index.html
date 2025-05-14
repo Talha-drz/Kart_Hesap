@@ -39,12 +39,17 @@
         }
 
         button:hover { background-color: #45a049; }
+
         .btn-update { background-color: yellow; color: black; }
         .btn-delete { background-color: red; color: white; }
         .btn-reset { background-color: darkred; color: white; }
         .btn-multiply { background-color: gold; color: black; }
         .btn-toplam { background-color: rgb(0, 204, 255); color: black; }
         .btn-klavuz { background-color: rgb(0, 60, 255); color: black; }
+
+        .btn-start { background-color: #ff7f00; color: white; } /* Dinlemeye Başla butonu için renk */
+        .btn-stop { background-color: #ff4747; color: white; } /* Durdur butonu için renk */
+        .btn-read { background-color: #1e90ff; color: white; } /* Oku butonu için renk */
 
         #numberInput {
             padding: 10px;
@@ -90,9 +95,10 @@
     <button onclick="addNumber()">Ekle</button>
     <button onclick="finish()" class="btn-toplam">Topla</button>
     <button onclick="multiply()" class="btn-multiply">Çarp</button>
+    <button onclick="startListening()" class="btn-start">🎤 Dinlemeye Başla</button>
+    <button onclick="stopListening()" class="btn-stop">🛑 Durdur</button>
+    <button onclick="readList()" class="btn-read">🔊 Oku</button> <!-- Oku butonu eklendi -->
     <button onclick="showGuide()" class="btn-klavuz">Tanıt</button>
-
-
 
     <div id="SayiList"></div>
     <p id="result"></p>
@@ -137,11 +143,10 @@
                 inputElement.value = "";
                 inputElement.focus();
             }
-            else if(sayi === 0)
-            { 
+            else if(sayi === 0) { 
                 finish();
             }
-            else{
+            else {
                 resetList();
             }
         }
@@ -177,7 +182,7 @@
                     inputElement.value = "";
                     document.getElementById("result").innerText = "";
                 }
-                else{
+                else {
                     document.getElementById("result").innerText = "Geçerli Bir Değer Giriniz Güncellemek İçin";
                 }
                 contextMenu.style.display = "none";
@@ -191,7 +196,7 @@
                     numbers.splice(selectedIndex, 1);
                     document.getElementById("result").innerText = "";
                     updateNumberList();
-                }a
+                }
                 contextMenu.style.display = "none";
             }
         }
@@ -205,53 +210,108 @@
         }
 
         inputElement.addEventListener("keydown", function(event) {
-             document.getElementById("result").innerText = "";
+            document.getElementById("result").innerText = "";
             if (event.key === "Enter") {
                 addNumber();
             } 
         });
-        
-   
+
         function showGuide() {
-            document.getElementById("result").innerText = 
-            "Bu uygulama, süt hesaplamalarını yapmanızı sağlar. Kullanımı şu şekildedir:\n\n" +
+            document.getElementById("result").innerText =
+"Bu uygulama, süt hesaplamalarını yapmanızı sağlar. Kullanımı şu şekildedir:\n\n" +
+
+"### Bilgisayar Kullanımı:\n" +
+"1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak sayı ekleyin.\n" +
+"2. **Toplam Hesaplama**: 'Topla' butonuna veya '0' yazıp 'Enter'a basarak toplamı hesaplayın.\n" +
+"3. **Çarpma**: 'Çarp' butonuyla toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
+"4. **Sayı Güncelleme**: Sayıya tıklayıp yeni değeri yazın ve 'Güncelle'ye tıklayın.\n" +
+"5. **Sayı Silme**: Sayıya sağ tıklayarak 'Sil' seçeneğini kullanın.\n" +
+"6. **Listeyi Sıfırlama**: 'Sıfırla' butonuyla veya boşken 'Enter' tuşuna basarak listeyi temizleyin.\n" +
+"7. **Oku**: Toplam değeri size sesli olarak okur.\n" +
+"8. **Dinle**: Sesli komutla sayıları eklemenizi sağlar.\n" +
+"9. **Durdur**: Sesli komut dinlemeyi durdurur.\n\n" +
+
+"### Telefon Kullanımı:\n" +
+"1. **Sayı Ekleme**: 'Ekle' butonuna veya 'Enter'a tıklayarak sayı ekleyin.\n" +
+"2. **Toplam Hesaplama**: 'Topla' butonuna veya '0' yazıp 'Enter'a basarak toplamı hesaplayın.\n" +
+"3. **Çarpma**: 'Çarp' butonuyla toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
+"4. **Sayı Güncelleme**: Sayıya uzun basıp yeni değeri yazın ve 'Güncelle'ye tıklayın.\n" +
+"5. **Sayı Silme**: Sayıya uzun basarak 'Sil' seçeneğini kullanın.\n" +
+"6. **Listeyi Sıfırlama**: 'Sıfırla' butonuyla veya boşken 'Enter'a basarak listeyi temizleyin.\n" +
+"7. **Oku**: Toplam değeri sesli şekilde dinleyin.\n" +
+"8. **Dinle**: Sesli komutla sayı eklemenize olanak sağlar.\n" +
+"9. **Durdur**: Sesli dinlemeyi sonlandırır.\n\n" +
+
+"Talha Durmaz\n@Talha_Drz";
+
+        }
         
-        "### Bilgisayar Kullanımı:\n" +
-        "1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak bir sayı ekleyebilirsiniz.\n" +
-        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak veya '0' yazıp 'Enter' tuşuna basarak toplamı hesaplayabilirsiniz.\n" +
-        "3. **Çarpma**: 'Çarp' butonuna tıklayarak mevcut toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
-        "4. **Sayı Güncelleme**: Güncellemek istediğiniz sayıya tıklayıp yeni sayıyı yazıp 'Güncelle' butonuna tıklayın.\n" +
-        "5. **Sayı Silme**: Sayıya sağ tıklayarak 'Sil' seçeneğini kullanabilirsiniz.\n" +
-        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz. Ayrıca, hiç bir değer girmeden 'Enter' tuşuna basarak da sıfırlayabilirsiniz.\n\n" +
+        // Listeyi okumak için fonksiyon
+        function readList() {
+            const speechSynthesis = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance();
+            utterance.lang = "tr-TR";
+            utterance.text = numbers.join(', '); // Listeyi aralarına virgül koyarak birleştiriyoruz
+            speechSynthesis.speak(utterance);
+        }
+        
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'tr-TR';
+        recognition.continuous = true;
+        recognition.interimResults = false;
 
-        "### Telefon Kullanımı:\n" +
-        "1. **Sayı Ekleme**: 'Ekle' butonuna tıklayarak veya 'Enter' tuşuna basarak bir sayı ekleyebilirsiniz.\n" +
-        "2. **Toplam Hesaplama**: 'Topla' butonuna tıklayarak veya '0' yazıp 'Enter' tuşuna basarak toplamı hesaplayabilirsiniz.\n" +
-        "3. **Çarpma**: 'Çarp' butonuna tıklayarak mevcut toplamı, girdiğiniz sayı ile çarpabilirsiniz.\n" +
-        "4. **Sayı Güncelleme**: Güncellemek istediğiniz sayıya uzun basarak, yeni sayıyı yazıp 'Güncelle' butonuna tıklayın.\n" +
-        "5. **Sayı Silme**: Sayıya uzun basarak 'Sil' seçeneğini kullanabilirsiniz.\n" +
-        "6. **Listeyi Sıfırlama**: 'Sıfırla' butonuna tıklayarak tüm listeyi sıfırlayabilirsiniz ayrıca hiçbir değer girmeden 'Enter' tuşuna basarakta yapabilirsiniz.\n\n"+
-        "Talha Durmaz\n Talha_Drz";
+        function playBeep() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'square'; // Bip sesinin şekli
+            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Ses frekansı (Hz)
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1); // 0.1 saniye boyunca çalsın
+        }
 
-    }
-    
-let startY = 0;
+        recognition.onresult = function(event) {
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript.trim();
+                const sayi = parseFloat(transcript); // Sayıların ondalıklı olabilmesi için parseFloat kullanılıyor
+                if (!isNaN(sayi)) {
+                    inputElement.value = sayi;
+                    addNumber();
+                    playBeep();
+                } else {
+                    console.log("Sayı değil:", transcript);
+                }
+            }
+        };
 
-document.addEventListener("touchstart", function (event) {
-    if (window.scrollY === 0) {
-        startY = event.touches[0].clientY; // Parmağın ilk dokunduğu noktayı al
-    }
-}, { passive: false });
+        recognition.onerror = function(event) {
+            alert("Hata: " + event.error);
+        };
 
-document.addEventListener("touchmove", function (event) {
-    let currentY = event.touches[0].clientY;
+        function startListening() {
+            recognition.start();
+        }
 
-    if (window.scrollY === 0 && currentY > startY) {
-        event.preventDefault(); // Yukarıdan aşağı çekme hareketini engelle
-    }
-}, { passive: false });
+        function stopListening() {
+            recognition.stop();
+        }
 
+        let startY = 0;
 
+        document.addEventListener("touchstart", function (event) {
+            if (window.scrollY === 0) {
+                startY = event.touches[0].clientY; // Parmağın ilk dokunduğu noktayı al
+            }
+        }, { passive: false });
+
+        document.addEventListener("touchmove", function (event) {
+            let currentY = event.touches[0].clientY;
+
+            if (window.scrollY === 0 && currentY > startY) {
+                event.preventDefault(); // Yukarıdan aşağı çekme hareketini engelle
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
