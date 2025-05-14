@@ -246,56 +246,58 @@
 
         }
         
-        // Listeyi okumak için fonksiyon
-        function readList() {
-            const speechSynthesis = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance();
-            utterance.lang = "tr-TR";
-            utterance.text = numbers.join(', '); // Listeyi aralarına virgül koyarak birleştiriyoruz
-            speechSynthesis.speak(utterance);
+       // Listeyi okumak için fonksiyon
+function readList() {
+    const speechSynthesis = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance();
+    utterance.lang = "tr-TR";
+    utterance.text = numbers.join(', '); // Listeyi aralarına virgül koyarak birleştiriyoruz
+    speechSynthesis.speak(utterance);
+}
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = 'tr-TR';
+recognition.continuous = true;
+recognition.interimResults = false;
+
+function playBeep() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = 'square'; // Bip sesinin şekli
+    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Ses frekansı (Hz)
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.1); // 0.1 saniye boyunca çalsın
+}
+
+recognition.onresult = function(event) {
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript.trim();
+        const sayi = parseFloat(transcript); // Sayıların ondalıklı olabilmesi için parseFloat kullanılıyor
+        if (!isNaN(sayi)) {
+            inputElement.value = sayi;
+            addNumber();
+            playBeep();
+        } else {
+            console.log("Sayı değil:", transcript);
         }
-        
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'tr-TR';
-        recognition.continuous = true;
-        recognition.interimResults = false;
+    }
+};
 
-        function playBeep() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            oscillator.type = 'square'; // Bip sesinin şekli
-            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Ses frekansı (Hz)
-            oscillator.connect(audioContext.destination);
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.1); // 0.1 saniye boyunca çalsın
-        }
+recognition.onerror = function(event) {
+    alert("Hata: " + event.error);
+};
 
-        recognition.onresult = function(event) {
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                const transcript = event.results[i][0].transcript.trim();
-                const sayi = parseFloat(transcript); // Sayıların ondalıklı olabilmesi için parseFloat kullanılıyor
-                if (!isNaN(sayi)) {
-                    inputElement.value = sayi;
-                    addNumber();
-                    playBeep();
-                } else {
-                    console.log("Sayı değil:", transcript);
-                }
-            }
-        };
+function startListening() {
+    recognition.start();
+}
 
-        recognition.onerror = function(event) {
-            alert("Hata: " + event.error);
-        };
+// Dinlemeyi durdurma kaldırıldı – bu fonksiyon artık hiçbir işlem yapmıyor
+function stopListening() {
+    // Fonksiyon devre dışı bırakıldı
+}
 
-        function startListening() {
-            recognition.start();
-        }
-
-        function stopListening() {
-            recognition.stop();
-        }
 
         let startY = 0;
 
