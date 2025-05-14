@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -276,27 +277,32 @@ recognition.onresult = function(event) {
         const transcript = event.results[i][0].transcript.trim();
         const sayi = parseFloat(transcript);
         if (!isNaN(sayi)) {            
-            if (!isNaN(sayi) && sayi !== 0) {
+            if (sayi !== 0) {
                 numbers.push(sayi);
                 toplam += sayi;
                 updateNumberList();
-            }
-            else if(sayi === 0) { 
+            } else {
                 finish();
             }
             playBeep();
-            
         } else {
             console.log("Sayı değil:", transcript);
         }
     }
 };
 
+recognition.onend = function () {
+    // Tarayıcı dinlemeyi durdurursa tekrar başlat
+    if (inputElement.disabled) {
+        recognition.start();
+    }
+};
+
 recognition.onerror = function(event) {
     alert("Hata: " + event.error);
-    inputElement.value = event.error; // Hata mesajını input'a yazdır
-
+    inputElement.value = event.error;
 };
+
 
 function startListening() {
     inputElement.disabled = true;  // Dinleme başlatıldığında input devre dışı
