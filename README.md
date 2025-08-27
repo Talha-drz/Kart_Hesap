@@ -1,3 +1,7 @@
+<img width="1914" height="1079" alt="image" src="https://github.com/user-attachments/assets/60326d93-53a9-4648-bf41-e20c8858eb5b" />
+
+
+
 # 🥛 Süt Kartı Hesaplama Uygulaması
 
 Bu proje, süt toplama ve hesaplama işlemlerini kolaylaştırmak için geliştirilmiş **web tabanlı bir uygulamadır**.  
